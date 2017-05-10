@@ -7,7 +7,9 @@ import {Router, Route, hashHistory, IndexRoute } from 'react-router';
 import './index.css';
 import AppLayout from './AppLayout';
 import Home from './pages/Home';
-import reducer from './pages/Home.reducer'
+import Details from './pages/Details';
+// import SignUp from './pages/SignUp';
+import reducer from './pages/Home.reducer';
 
 const store = Redux.createStore(
     reducer,
@@ -20,6 +22,7 @@ ReactDOM.render(
         <Router history={hashHistory}>
             <Route path="/" component={AppLayout}>
                 <IndexRoute component={Home} />
+                <Route path="/shop/:id" component={Details} />
             </Route>
         </Router>
     </ReactRedux.Provider>,
