@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import { hashHistory } from 'react-router'
 
 // Show products on home page
 export function getProducts() {
@@ -26,10 +27,12 @@ export function getDetails(id) {
             type: 'GET',
             url: 'http://localhost:4000/api/product/' + id,
         })
-        .then(data => dispatch({
-            type: 'get-details',
-            payload: data
-        }))
+        .then(data => {
+            dispatch({
+                type: 'get-details',
+                payload: data
+            })
+        })
         .catch(resp => {
             let error = (resp && resp.responseJSON && resp.responseJSON.message) || 'Something went wrong'
             alert(error + '. Please try again.');
@@ -45,21 +48,12 @@ export function toggleLogin() {
     }
 }
 
-// User typing in email field
-export function emailTyping(event) {
+// User typing in any input field
+export function typing(event, field) {
     return {
-        type: 'email-typing',
-        email: event.target.value
-    };
-}
-
-
-// User typing in password field
-export function passwordTyping(event) {
-    return {
-        type: 'password-typing',
-        password: event.target.value
-    };
+        type: field,
+        value: event.target.value
+    }
 }
 
 // Submit login
@@ -78,6 +72,40 @@ export function submitLogin(email, password) {
             type: 'login-successful',
             payload: data
         }))
+        .catch(resp => {
+            let error = (resp && resp.responseJSON && resp.responseJSON.message) || 'Something went wrong'
+            alert(error + '. Please try again.');
+        })
+    }
+    return asyncAction;
+}
+
+// Submit new user sign up
+export function submitSignUp(first, last, address1, address2, city, state, zip, email, password) {
+    let asyncAction = function(dispatch) {
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:4000/api/user/signup',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                first_name: first,
+                last_name: last,
+                address_1: address1,
+                address_2: address2,
+                city: city,
+                state: state,
+                zip: zip,
+                email: email,
+                password: password
+            })
+        })
+        .then(data => {
+            hashHistory.push('/');
+            dispatch({
+                type: 'login-successful',
+                payload: data
+            })
+        })
         .catch(resp => {
             let error = (resp && resp.responseJSON && resp.responseJSON.message) || 'Something went wrong'
             alert(error + '. Please try again.');

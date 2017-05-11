@@ -9,8 +9,11 @@ body {
 }
 .userName {
     position: absolute;
-    top: 10px;
-    left: 12px;
+    top: 21px;
+    left: 28px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 300;
 }
 .nav li {
     display: inline-block;
@@ -26,9 +29,11 @@ body {
 .nav li a:hover, .nav li:hover {
     cursor: pointer;
     font-weight: 900;
+    background-color: white;
 }
 .active {
     font-weight: 900;
+    background-color: white;
 }
 .title {
     margin: 40px 0 0 20px;
@@ -109,7 +114,7 @@ body {
     margin-right: 20px;
     letter-spacing: 1px;
 }
-.login button {
+.login button, .signUp button {
     width: 109px;
     height: 32px;
     background-color: black;
@@ -119,4 +124,26 @@ body {
     letter-spacing: 3px;
     font-weight: 400;
     font-size: 11px;
+}
+.signUp button {
+    float: right;
+}
+.signUp {
+    margin: 60px auto;
+    width: 400px;
+}
+.signUp input {
+    font-weight: 300;
+    padding: 5px;
+    border-radius: 0;
+    letter-spacing: 1px;
+}
+.signUp label {
+    font-weight: 300;
+}
+.password-message {
+    margin-top: 5px;
+    color: red;
+    font-weight: 300;
+    letter-spacing: 1px;
 }

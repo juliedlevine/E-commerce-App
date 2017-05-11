@@ -8,7 +8,7 @@ import './index.css';
 import AppLayout from './AppLayout';
 import Home from './pages/Home';
 import Details from './pages/Details';
-// import SignUp from './pages/SignUp';
+import SignUp from './pages/SignUp';
 import reducer from './pages/Home.reducer';
 
 const store = Redux.createStore(
@@ -23,6 +23,7 @@ ReactDOM.render(
             <Route path="/" component={AppLayout}>
                 <IndexRoute component={Home} />
                 <Route path="/shop/:id" component={Details} />
+                <Route path="/signup" component={SignUp} />
             </Route>
         </Router>
     </ReactRedux.Provider>,

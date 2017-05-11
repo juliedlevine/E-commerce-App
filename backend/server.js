@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 const express = require('express');
-const Promise = require('bluebird');
+global.Promise = require('bluebird');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const pgp = require('pg-promise')({promiseLib: Promise});
@@ -16,7 +16,7 @@ app.use(cors());
 
 // Get array of all product objects
 app.get('/api/products', (req, resp, next) => {
-    db.any(`select * from products`)
+    db.any(`select * from products order by id`)
         .then(products => resp.json(products))
         .catch(next);
 });
@@ -34,9 +34,19 @@ app.post('/api/user/signup', (req, resp, next) => {
     let user = req.body;
     bcrypt.hash(user.password, 10)
         .then(encrypted => {
-            return db.one(`insert into users values (default, $1, $2, $3, $4, $5, $6, $7, $8, $9) returning *`, [user.first_name, user.last_name, user.address_1, user.address_2, user.city, user.state, user.zip, user.email, encrypted])
+            return db.one(`insert into users values (default, $1, $2, $3, $4, $5, $6, $7, $8, $9) returning id, first_name`, [user.first_name, user.last_name, user.address_1, user.address_2, user.city, user.state, user.zip, user.email, encrypted])
         })
-        .then(user => resp.json(user))
+        .then(data => {
+            let token = uuid.v4();
+            return [data, db.one(`insert into tokens values (default, $1, $2) returning token`, [data.id, token])]
+        })
+        .spread((data, token) => {
+            let newData = {
+                first_name: data.first_name,
+                token: token
+            }
+            resp.json(newData);
+        })
         .catch((error) => {
             if (error.message === 'duplicate key value violates unique constraint "users_email_key"') {
                 resp.status(409);
