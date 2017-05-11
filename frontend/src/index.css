@@ -2,6 +2,10 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Lato', sans-serif;
+    font-weight: 300;
+}
+.main {
+    min-height: 500px;
 }
 .nav {
     text-align: center;
@@ -13,7 +17,6 @@ body {
     left: 28px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    font-weight: 300;
 }
 .nav li {
     display: inline-block;
@@ -58,7 +61,6 @@ body {
     padding: 20px;
 }
 .footer p {
-    font-weight: 300;
     clear: both;
     letter-spacing: 1px;
     max-width: 880px;
@@ -83,7 +85,6 @@ body {
     letter-spacing: 1.2px;
 }
 .details p, li {
-    font-weight: 300;
     letter-spacing: 1.2px;
     line-height: 30px;
 }
@@ -106,7 +107,6 @@ body {
 .login {
     text-align: center;
     letter-spacing: 1px;
-    font-weight: 300;
 }
 .login input {
     margin-top: 29px;
@@ -134,22 +134,16 @@ body {
     width: 400px;
 }
 .signUp input {
-    font-weight: 300;
     padding: 5px;
     border-radius: 0;
     letter-spacing: 1px;
 }
-.signUp label {
-    font-weight: 300;
-}
 .password-message {
     margin-top: 5px;
     color: red;
-    font-weight: 300;
     letter-spacing: 1px;
 }
 .cart {
-    font-weight: 300;
     width: 25px;
     position: absolute;
     left: 95%;
@@ -174,7 +168,6 @@ tr {
 }
 th, td, tr {
     font-size: 16px;
-    font-weight: 300;
     padding: 15px 0;
     width: 200px;
 }
@@ -196,4 +189,15 @@ th, td, tr {
     margin-top: 30px;
     font-size: 14px;
     letter-spacing: 5px;
+}
+.thumbsUp {
+    display: block;
+    margin: 75px auto;
+    width: 75px;
+}
+.thanks {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 1px;
 }

@@ -28,7 +28,7 @@ class AppLayout extends React.Component {
                             </Link>
                         </div> :
                         <div></div>}
-                    
+
                 </ul>
 
                 {this.props.showLogin ?

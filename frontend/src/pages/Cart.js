@@ -4,6 +4,15 @@ import * as actions from './Home.actions';
 import { Link } from 'react-router';
 
 class Cart extends React.Component {
+
+    getCartTotal() {
+        let total = 0;
+        this.props.shopping_cart.map((item, index) => {
+            total += item.price;
+        })
+        return total;
+    }
+
     componentDidMount() {
         this.props.getCart(this.props.token);
     }
@@ -32,11 +41,11 @@ class Cart extends React.Component {
                     )}
                         <tr>
                             <td colSpan="3">Subtotal</td>
-                            <td colSpan="2">$10.00</td>
+                            <td colSpan="2">${this.getCartTotal()}.00</td>
                         </tr>
                     </tbody>
                 </table>
-                <button>Checkout</button>
+                <button onClick={()=> this.props.checkout(this.props.token)}>Checkout</button>
             </div>
         )
     }

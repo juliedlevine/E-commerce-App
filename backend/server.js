@@ -112,10 +112,7 @@ app.post('/api/shopping_cart', (req, resp, next) => {
             resp.json(shopping_cart);
         })
         .catch((error) => {
-            if (error.message === 'No data returned from the query.') {
-                resp.status(401);
-                resp.json({message: "User not authenticated"});
-            } else if  (error.message == "there is no parameter $1") {
+            if (error.message === 'No data returned from the query.' || error.message === "there is no parameter $1") {
                 resp.status(401);
                 resp.json({message: "Please Login or Sign Up."});
             } else {

@@ -110,6 +110,10 @@ function reducer(state = INITIAL_STATE, action) {
         return Object.assign({}, state, {
             shopping_cart: action.payload
         })
+    } else if (action.type === 'purchase-successful') {
+        return Object.assign({}, state, {
+            shopping_cart: []
+        })
     } else {
         return state
     }

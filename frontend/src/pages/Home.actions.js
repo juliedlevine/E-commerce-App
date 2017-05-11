@@ -196,3 +196,28 @@ export function deleteFromCart(item, token) {
     }
     return asyncAction;
 }
+
+// Checkout
+export function checkout(token) {
+    let asyncAction = function(dispatch) {
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:4000/api/checkout',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                token: token
+            })
+        })
+        .then(response => {
+            hashHistory.push('/thanks');
+            dispatch({
+                type: 'purchase-successful'
+            })
+        })
+        .catch(resp => {
+            let error = (resp && resp.responseJSON && resp.responseJSON.message) || 'Something went wrong'
+            alert(error);
+        })
+    }
+    return asyncAction;
+}
