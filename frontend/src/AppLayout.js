@@ -18,15 +18,17 @@ class AppLayout extends React.Component {
                         <Link onClick={this.props.logout} to="">Log Out</Link> :
                         <Link onClick={this.props.toggleLogin} to="">Log In</Link> }
                     </li>
-
                     <li><Link to="/signup" activeClassName="active">Sign Up</Link></li>
-                    <div className="cart">
-                        <Link to="/cart">
-                            <img src="/shopping-cart.svg"></img>
-                            <div>{this.props.cart}</div>
-                        </Link>
-                    </div>
 
+                    {this.props.shopping_cart.length > 0 ?
+                        <div className="cart">
+                            <Link to="/cart">
+                                <img src="/shopping-cart.svg"></img>
+                                <div>{this.props.shopping_cart.length}</div>
+                            </Link>
+                        </div> :
+                        <div></div>}
+                    
                 </ul>
 
                 {this.props.showLogin ?

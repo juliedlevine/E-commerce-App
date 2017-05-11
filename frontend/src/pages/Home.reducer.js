@@ -16,7 +16,7 @@ const INITIAL_STATE = {
     password: '',
     password_confirm: '',
     passwords_match: true,
-    cart: 0
+    shopping_cart: []
 };
 
 function reducer(state = INITIAL_STATE, action) {
@@ -53,7 +53,8 @@ function reducer(state = INITIAL_STATE, action) {
             token: '',
             first_name: '',
             email: '',
-            password: ''
+            password: '',
+            shopping_cart: []
         })
     } else if (action.type === 'first-name') {
         return Object.assign({}, state, {
@@ -101,10 +102,13 @@ function reducer(state = INITIAL_STATE, action) {
             password_confirm: action.value,
             passwords_match: matched
         })
-    } else if (action.type === 'added-to-cart') {
-
+    } else if (action.type === 'update-cart') {
         return Object.assign({}, state, {
-            cart: state.cart + 1
+            shopping_cart: action.payload
+        })
+    } else if (action.type === 'get-cart') {
+        return Object.assign({}, state, {
+            shopping_cart: action.payload
         })
     } else {
         return state

@@ -115,7 +115,7 @@ body {
     margin-right: 20px;
     letter-spacing: 1px;
 }
-.login button, .signUp button {
+.login button, .signUp button, .shoppingCart button {
     width: 109px;
     height: 32px;
     background-color: black;
@@ -154,4 +154,46 @@ body {
     position: absolute;
     left: 95%;
     top: 17px;
+}
+.shoppingCart, table {
+    max-width: 800px;
+    width: 100%;
+    margin: 50px auto;
+}
+.cartHeading {
+    font-size: 17px;
+    text-transform: uppercase;
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+.cartImage {
+    width: 100px;
+}
+tr {
+    border-bottom: 1px solid #dcdee2;
+}
+th, td, tr {
+    font-size: 16px;
+    font-weight: 300;
+    padding: 15px 0;
+    width: 200px;
+}
+.deleteCol {
+    width: 5px;
+}
+.deleteCol:hover {
+    color: red;
+    cursor: pointer;
+}
+.tableHeaders th {
+    font-weight: 700;
+    font-size: 12px;
+}
+.shoppingCart button {
+    float: right;
+    width: 200px;
+    height: 40px;
+    margin-top: 30px;
+    font-size: 14px;
+    letter-spacing: 5px;
 }

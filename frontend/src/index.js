@@ -9,6 +9,7 @@ import './index.css';
 import AppLayout from './AppLayout';
 import Home from './pages/Home';
 import Details from './pages/Details';
+import Cart from './pages/Cart';
 import SignUp from './pages/SignUp';
 import reducer from './pages/Home.reducer';
 
@@ -33,6 +34,7 @@ ReactDOM.render(
                 <IndexRoute component={Home} />
                 <Route path="/shop/:id" component={Details} />
                 <Route path="/signup" component={SignUp} />
+                <Route path="/cart" component={Cart} />
             </Route>
         </Router>
     </ReactRedux.Provider>,

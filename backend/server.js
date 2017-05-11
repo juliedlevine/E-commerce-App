@@ -103,10 +103,13 @@ app.post('/api/shopping_cart', (req, resp, next) => {
     let token = req.body.token;
     db.one(`select user_id from tokens join users on tokens.user_id = users.id and tokens.token = $1`, token)
         .then((results) => {
-            return db.one(`insert into shopping_cart values (default, $1, $2) returning id`, [parseInt(results.user_id), product_id])
+            return db.one(`insert into shopping_cart values (default, $1, $2) returning user_id`, [parseInt(results.user_id), product_id])
         })
-        .then(shopping_cart_id => {
-            resp.json(shopping_cart_id);
+        .then((results) => {
+            return db.any(`select * from products inner join shopping_cart on shopping_cart.product_id = products.id where shopping_cart.user_id = $1`, results.user_id)
+        })
+        .then(shopping_cart => {
+            resp.json(shopping_cart);
         })
         .catch((error) => {
             if (error.message === 'No data returned from the query.') {
@@ -128,7 +131,7 @@ app.post('/api/shopping_cart_items', (req, resp, next) => {
     let token = req.body.token;
     db.one(`select user_id from tokens join users on tokens.user_id = users.id and tokens.token = $1`, token)
         .then((results) => {
-            return db.any(`select products.name, products.price, products.description from products inner join shopping_cart on shopping_cart.product_id = products.id where shopping_cart.user_id = $1`, results.user_id)
+            return db.any(`select * from products inner join shopping_cart on shopping_cart.product_id = products.id where shopping_cart.user_id = $1`, results.user_id)
         })
         .then((shopping_cart) => {
             if (shopping_cart.length === 0) {
@@ -136,6 +139,32 @@ app.post('/api/shopping_cart_items', (req, resp, next) => {
             } else {
                 resp.json(shopping_cart);
             }
+        })
+        .catch((error) => {
+            if (error.message === 'No data returned from the query.') {
+                resp.status(401);
+                resp.json({message: "User not authenticated"});
+            } else {
+                throw error;
+            }
+        })
+        .catch(next);
+})
+
+// Delete item from user's shopping cart
+app.post('/api/delete_shopping_cart', (req, resp, next) => {
+    let token = req.body.token;
+    let product_id = req.body.item.product_id;
+    let shopping_cart_id = req.body.item.id;
+    db.one(`select user_id from tokens join users on tokens.user_id = users.id and tokens.token = $1`, token)
+        .then((results) => {
+            return db.one(`delete from shopping_cart where user_id = $1 and product_id = $2 and id = $3 returning user_id`, [results.user_id, product_id, shopping_cart_id])
+        })
+        .then((results) => {
+            return db.any(`select * from products inner join shopping_cart on shopping_cart.product_id = products.id where shopping_cart.user_id = $1`, results.user_id)
+        })
+        .then(shopping_cart => {
+            resp.json(shopping_cart);
         })
         .catch((error) => {
             if (error.message === 'No data returned from the query.') {

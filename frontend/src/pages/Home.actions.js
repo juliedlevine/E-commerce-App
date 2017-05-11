@@ -20,6 +20,29 @@ export function getProducts() {
     return asyncAction;
 }
 
+// Show all items in user's shopping cart
+export function getCart(token) {
+    let asyncAction = function(dispatch) {
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:4000/api/shopping_cart_items',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                token: token
+            })
+        })
+        .then(data => dispatch({
+            type: 'get-cart',
+            payload: data
+        }))
+        .catch(resp => {
+            let error = (resp && resp.responseJSON && resp.responseJSON.message) || 'Something went wrong'
+            alert(error + '. Please try again.');
+        })
+    }
+    return asyncAction;
+}
+
 // Show details of individual product when the image is clicked
 export function getDetails(id) {
     let asyncAction = function(dispatch) {
@@ -121,6 +144,7 @@ export function submitSignUp(first, last, address1, address2, city, state, zip, 
     return asyncAction;
 }
 
+// Add item to user's cart
 export function addToCart(id, token) {
     let asyncAction = function(dispatch) {
         $.ajax({
@@ -133,10 +157,36 @@ export function addToCart(id, token) {
 
             })
         })
-        .then(item => {
+        .then(newCart => {
             dispatch({
-                type: 'added-to-cart',
-                payload: item
+                type: 'update-cart',
+                payload: newCart
+            })
+        })
+        .catch(resp => {
+            let error = (resp && resp.responseJSON && resp.responseJSON.message) || 'Something went wrong'
+            alert(error);
+        })
+    }
+    return asyncAction;
+}
+
+// Delete item from user's cart
+export function deleteFromCart(item, token) {
+    let asyncAction = function(dispatch) {
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:4000/api/delete_shopping_cart',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                item: item,
+                token: token
+            })
+        })
+        .then(newCart => {
+            dispatch({
+                type: 'update-cart',
+                payload: newCart
             })
         })
         .catch(resp => {
