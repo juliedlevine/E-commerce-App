@@ -4,6 +4,7 @@ import * as Redux from 'redux';
 import * as ReactRedux from 'react-redux';
 import ReduxThunk from 'redux-thunk';
 import {Router, Route, hashHistory, IndexRoute } from 'react-router';
+import Cookies from 'js-cookie';
 import './index.css';
 import AppLayout from './AppLayout';
 import Home from './pages/Home';
@@ -16,6 +17,14 @@ const store = Redux.createStore(
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
     Redux.applyMiddleware(ReduxThunk)
 );
+
+let name = Cookies.get('name');
+let token = Cookies.get('token');
+store.dispatch({
+    type: 'read-cookie',
+    first_name: name,
+    token: token
+})
 
 ReactDOM.render(
     <ReactRedux.Provider store={store}>

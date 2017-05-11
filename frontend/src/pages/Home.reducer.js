@@ -1,8 +1,10 @@
+import Cookies from 'js-cookie';
 const INITIAL_STATE = {
     products: [],
     details: {},
     showLogin: false,
     token: '',
+    user_id: '',
     first_name: '',
     last_name: '',
     address_1: '',
@@ -13,7 +15,8 @@ const INITIAL_STATE = {
     email: '',
     password: '',
     password_confirm: '',
-    passwords_match: true
+    passwords_match: true,
+    cart: 0
 };
 
 function reducer(state = INITIAL_STATE, action) {
@@ -29,11 +32,28 @@ function reducer(state = INITIAL_STATE, action) {
         return Object.assign({}, state, {
             showLogin: !state.showLogin
         })
+    } else if (action.type === 'read-cookie') {
+        return Object.assign({}, state, {
+            first_name: action.first_name,
+            token: action.token
+        })
     } else if (action.type === 'login-successful') {
+        Cookies.set('token', action.payload.token);
+        Cookies.set('name', action.payload.first_name);
         return Object.assign({}, state, {
             token: action.payload.token,
             first_name: action.payload.first_name,
+            user_id: action.payload.id,
             showLogin: false
+        })
+    } else if (action.type === 'logout') {
+        Cookies.remove('name');
+        Cookies.remove('token');
+        return Object.assign({}, state, {
+            token: '',
+            first_name: '',
+            email: '',
+            password: ''
         })
     } else if (action.type === 'first-name') {
         return Object.assign({}, state, {
@@ -80,6 +100,11 @@ function reducer(state = INITIAL_STATE, action) {
         return Object.assign({}, state, {
             password_confirm: action.value,
             passwords_match: matched
+        })
+    } else if (action.type === 'added-to-cart') {
+
+        return Object.assign({}, state, {
+            cart: state.cart + 1
         })
     } else {
         return state

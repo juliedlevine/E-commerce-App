@@ -34,15 +34,16 @@ app.post('/api/user/signup', (req, resp, next) => {
     let user = req.body;
     bcrypt.hash(user.password, 10)
         .then(encrypted => {
-            return db.one(`insert into users values (default, $1, $2, $3, $4, $5, $6, $7, $8, $9) returning id, first_name`, [user.first_name, user.last_name, user.address_1, user.address_2, user.city, user.state, user.zip, user.email, encrypted])
+            return db.one(`insert into users values (default, $1, $2, $3, $4, $5, $6, $7, $8, $9) returning *`, [user.first_name, user.last_name, user.address_1, user.address_2, user.city, user.state, user.zip, user.email, encrypted])
         })
-        .then(data => {
+        .then(loginDetails => {
             let token = uuid.v4();
-            return [data, db.one(`insert into tokens values (default, $1, $2) returning token`, [data.id, token])]
+            return [loginDetails, db.one(`insert into tokens values (default, $1, $2) returning token`, [loginDetails.id, token])]
         })
-        .spread((data, token) => {
+        .spread((loginDetails, token) => {
             let newData = {
-                first_name: data.first_name,
+                first_name: loginDetails.first_name,
+                id: loginDetails.id,
                 token: token
             }
             resp.json(newData);
@@ -79,8 +80,7 @@ app.post('/api/user/login', (req, resp, next) => {
                 .then(()=> {
                     let data = {
                         first_name: loginDetails.first_name,
-                        last_name: loginDetails.last_name,
-                        email: loginDetails.email,
+                        id: loginDetails.id,
                         token: token
                     }
                     resp.json(data);
@@ -112,6 +112,9 @@ app.post('/api/shopping_cart', (req, resp, next) => {
             if (error.message === 'No data returned from the query.') {
                 resp.status(401);
                 resp.json({message: "User not authenticated"});
+            } else if  (error.message == "there is no parameter $1") {
+                resp.status(401);
+                resp.json({message: "Please Login or Sign Up."});
             } else {
                 throw error;
             }

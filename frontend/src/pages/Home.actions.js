@@ -41,10 +41,17 @@ export function getDetails(id) {
     return asyncAction;
 }
 
-// Show log in details when Log in is clicked in the nav bar
+// Show log in form when Log in is clicked in the nav bar
 export function toggleLogin() {
     return {
         type: 'toggle-login'
+    }
+}
+
+// User clicks log out button in the nav bar
+export function logout() {
+    return {
+        type: 'logout'
     }
 }
 
@@ -109,6 +116,32 @@ export function submitSignUp(first, last, address1, address2, city, state, zip, 
         .catch(resp => {
             let error = (resp && resp.responseJSON && resp.responseJSON.message) || 'Something went wrong'
             alert(error + '. Please try again.');
+        })
+    }
+    return asyncAction;
+}
+
+export function addToCart(id, token) {
+    let asyncAction = function(dispatch) {
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:4000/api/shopping_cart',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                product_id: id,
+                token: token
+
+            })
+        })
+        .then(item => {
+            dispatch({
+                type: 'added-to-cart',
+                payload: item
+            })
+        })
+        .catch(resp => {
+            let error = (resp && resp.responseJSON && resp.responseJSON.message) || 'Something went wrong'
+            alert(error);
         })
     }
     return asyncAction;

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "jquery": "^3.2.1",
+    "js-cookie": "^2.1.4",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.4",

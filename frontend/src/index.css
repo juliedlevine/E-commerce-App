@@ -25,6 +25,7 @@ body {
     color: black;
     font-size: 13px;
     letter-spacing: 2px;
+    background-color: white;
 }
 .nav li a:hover, .nav li:hover {
     cursor: pointer;
@@ -36,7 +37,7 @@ body {
     background-color: white;
 }
 .title {
-    margin: 40px 0 0 20px;
+    margin: 30px 0 0 20px;
     text-align: center;
     font-family: 'Work Sans', sans-serif;
     font-size: 30px;
@@ -146,4 +147,11 @@ body {
     color: red;
     font-weight: 300;
     letter-spacing: 1px;
+}
+.cart {
+    font-weight: 300;
+    width: 25px;
+    position: absolute;
+    left: 95%;
+    top: 17px;
 }

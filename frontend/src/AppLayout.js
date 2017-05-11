@@ -10,12 +10,23 @@ class AppLayout extends React.Component {
             <div>
             {this.props.token ?
                 <p className="userName">Hi, {this.props.first_name}</p> :
-                <p></p>}
+                <div></div>}
 
                 <ul className="nav">
                     <li><IndexLink to="/" activeClassName="active">Home</IndexLink></li>
-                    <li onClick={this.props.toggleLogin}>Log In</li>
+                    <li>{this.props.token ?
+                        <Link onClick={this.props.logout} to="">Log Out</Link> :
+                        <Link onClick={this.props.toggleLogin} to="">Log In</Link> }
+                    </li>
+
                     <li><Link to="/signup" activeClassName="active">Sign Up</Link></li>
+                    <div className="cart">
+                        <Link to="/cart">
+                            <img src="/shopping-cart.svg"></img>
+                            <div>{this.props.cart}</div>
+                        </Link>
+                    </div>
+
                 </ul>
 
                 {this.props.showLogin ?
@@ -29,6 +40,7 @@ class AppLayout extends React.Component {
                 <div className="main">
                     {this.props.children}
                 </div>
+
                 <div className="footer">
                     <p>This website is a clone of lucymail.us and was created as a learning exercise by Julie Dyer at the coding bootcamp DigitalCrafts. All images and intellectual property belong to Lucy Halcomb. Please visit Lucy's store to purchase her products.</p>
                 </div>
