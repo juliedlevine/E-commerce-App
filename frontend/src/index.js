@@ -11,7 +11,8 @@ import Home from './pages/Home';
 import Details from './pages/Details';
 import Cart from './pages/Cart';
 import SignUp from './pages/SignUp';
-import Thanks from './pages/Thanks'
+import Thanks from './pages/Thanks';
+import Confirm from './pages/Confirm';
 import reducer from './pages/Home.reducer';
 
 const store = Redux.createStore(
@@ -36,6 +37,7 @@ ReactDOM.render(
                 <Route path="/shop/:id" component={Details} />
                 <Route path="/signup" component={SignUp} />
                 <Route path="/cart" component={Cart} />
+                <Route path="/confirm" component={Confirm} />
                 <Route path="/thanks" component={Thanks} />
             </Route>
         </Router>

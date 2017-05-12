@@ -6,6 +6,7 @@ const cors = require('cors');
 const pgp = require('pg-promise')({promiseLib: Promise});
 const bcrypt = require('bcrypt');
 const uuid = require('uuid');
+
 const db = pgp({
     database: 'e-commerce'
 });
@@ -210,6 +211,13 @@ app.post('/api/checkout', (req, resp, next) => {
         })
         .catch(next)
 })
+
+app.post('/api/pay', (req, resp, next) => {
+    let stripeToken = req.body.stripeToken;
+    console.log('Stripe Token:', stripeToken);
+    resp.json({message: "purchase successful"});
+})
+
 
 // Error handling
 app.use((err, req, resp, next) => {

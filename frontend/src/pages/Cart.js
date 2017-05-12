@@ -45,7 +45,7 @@ class Cart extends React.Component {
                         </tr>
                     </tbody>
                 </table>
-                <button onClick={()=> this.props.checkout(this.props.token)}>Checkout</button>
+                <button className="confirmButton"><Link to="/confirm">Checkout</Link></button>
             </div>
         )
     }

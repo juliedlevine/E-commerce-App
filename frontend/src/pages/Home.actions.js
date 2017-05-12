@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { hashHistory } from 'react-router'
+const StripeCheckout = window.StripeCheckout;
 
 // Show products on home page
 export function getProducts() {
@@ -197,27 +198,70 @@ export function deleteFromCart(item, token) {
     return asyncAction;
 }
 
-// Checkout
-export function checkout(token) {
+// Checkout - handling this in ChargeCard function now
+// export function checkout(token) {
+//     let asyncAction = function(dispatch) {
+//         $.ajax({
+//             type: 'POST',
+//             url: 'http://localhost:4000/api/checkout',
+//             contentType: 'application/json',
+//             data: JSON.stringify({
+//                 token: token
+//             })
+//         })
+//         .then(response => {
+//             hashHistory.push('/thanks');
+//             dispatch({
+//                 type: 'purchase-successful'
+//             })
+//         })
+//         .catch(resp => {
+//             let error = (resp && resp.responseJSON && resp.responseJSON.message) || 'Something went wrong'
+//             alert(error);
+//         })
+//     }
+//     return asyncAction;
+// }
+
+export function chargeCard(amount, cookieToken) {
     let asyncAction = function(dispatch) {
-        $.ajax({
-            type: 'POST',
-            url: 'http://localhost:4000/api/checkout',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                token: token
-            })
-        })
-        .then(response => {
-            hashHistory.push('/thanks');
-            dispatch({
-                type: 'purchase-successful'
-            })
-        })
-        .catch(resp => {
-            let error = (resp && resp.responseJSON && resp.responseJSON.message) || 'Something went wrong'
-            alert(error);
-        })
+        let handler = StripeCheckout.configure({
+            key: 'pk_test_mHlocB4xkrc0EgJxchCMRjFs',
+            image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+            locale: 'auto',
+            token: function callback(token) {
+                var stripeToken = token.id;
+                console.log(stripeToken);
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:4000/api/pay',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        stripeToken: stripeToken
+                    })
+                })
+                .then(response => {
+                    $.ajax({
+                        type: 'POST',
+                        url: 'http://localhost:4000/api/checkout',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            token: cookieToken
+                        })
+                    })
+                    .then(response => {
+                        hashHistory.push('/thanks');
+                        dispatch({
+                            type: 'purchase-successful'
+                        })
+                    })
+                })
+            }
+        });
+        handler.open({
+            name: 'Lucy Mail',
+            amount: amount
+        });
     }
     return asyncAction;
 }
