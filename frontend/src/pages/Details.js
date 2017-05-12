@@ -3,6 +3,14 @@ import * as ReactRedux from 'react-redux';
 import * as actions from './Home.actions';
 
 class Details extends React.Component {
+    checkUser() {
+        if (this.props.token) {
+            this.props.addToCart(this.props.details.id, this.props.token);
+        } else {
+            this.props.emptyFields();
+        }
+    }
+
     componentDidMount() {
         this.props.getDetails(this.props.params.id);
     }
@@ -22,7 +30,11 @@ class Details extends React.Component {
                             <li>card dimensions {this.props.details.card_dimension}</li>
                             <li>made in the U.S.A.</li>
                         </ul>
-                        <button onClick={()=> this.props.addToCart(this.props.details.id, this.props.token)}className="add-cart">Add to cart</button>
+
+                        <button onClick={()=> this.checkUser()}className="add-cart">Add to cart</button>
+                        {this.props.empty_fields?
+                            <p className="message">Please log in or sign up</p> :
+                            <p></p>}
                     </div>
                 </div>
             </div>

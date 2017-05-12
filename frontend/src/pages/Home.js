@@ -6,7 +6,8 @@ import { Link } from 'react-router';
 class Home extends React.Component {
     componentDidMount() {
         this.props.getProducts();
-        this.props.getCart(this.props.token);
+        // Causes error if no products in cart. Fix later.
+        // this.props.getCart(this.props.token);
     }
 
     render() {

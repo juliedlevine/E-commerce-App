@@ -6,6 +6,9 @@ const cors = require('cors');
 const pgp = require('pg-promise')({promiseLib: Promise});
 const bcrypt = require('bcrypt');
 const uuid = require('uuid');
+const config = require('./config');
+const stripePackage = require('stripe');
+const stripe = stripePackage(config.stripeSecret);
 
 const db = pgp({
     database: 'e-commerce'
@@ -13,6 +16,8 @@ const db = pgp({
 
 const app = express();
 app.use(bodyParser.json());
+// serve all the public files
+app.use(express.static('public'));
 app.use(cors());
 
 // Get array of all product objects
@@ -212,9 +217,33 @@ app.post('/api/checkout', (req, resp, next) => {
         .catch(next)
 })
 
+// Click Submit payment button
 app.post('/api/pay', (req, resp, next) => {
     let stripeToken = req.body.stripeToken;
-    console.log('Stripe Token:', stripeToken);
+    let email = req.body.email;
+    let amount = req.body.amount;
+    stripe.customers.create({
+            email: email
+        })
+        .then(customer => {
+            return stripe.customers.createSource(customer.id, {
+                source: stripeToken
+            });
+        })
+        .then(source => {
+            return stripe.charges.create({
+                amount: amount,
+                currency: 'usd',
+                customer: source.customer,
+                description: 'Test Charge'
+            });
+        })
+        .then(charge => {
+            console.log(charge);
+        })
+        .catch(err => {
+            console.log(err.message);
+        })
     resp.json({message: "purchase successful"});
 })
 

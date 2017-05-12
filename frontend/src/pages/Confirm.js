@@ -6,6 +6,14 @@ import { Link } from 'react-router';
 
 class Confirm extends React.Component {
 
+    checkForm() {
+        if (this.props.first_name === '' || this.props.last_name === '' || this.props.address_1 === '' || this.props.city === '' || this.props.state === '' || this.props.zip === '' || this.props.email === '') {
+            this.props.emptyFields();
+        } else {
+            this.props.chargeCard(this.getCartTotal() * 100, this.props.token, this.props.email)
+        }
+    }
+
     getCartTotal() {
         let total = 0;
         this.props.shopping_cart.map((item, index) => {
@@ -54,19 +62,20 @@ class Confirm extends React.Component {
                     <div className="signUp checkout">
                     <h4 className="formHeader">Customer Information</h4>
                     <div className="form-group">
+                        <label>First Name</label>
+                        <input onChange={(event)=> this.props.typing(event, 'first-name')}className="form-control" type="text"></input>
+                    </div>
+                    <div className="form-group">
+                        <label>Last Name</label>
+                        <input onChange={(event)=> this.props.typing(event, 'last-name')} className="form-control" type="text"></input>
+                    </div>
+                    <div className="form-group">
                         <label>Email</label>
                         <input onChange={(event)=> this.props.typing(event, 'email')}className="form-control" type="text"></input>
                     </div>
+
                     <br />
                     <h4 className="formHeader">Shipping Address</h4>
-                        <div className="form-group">
-                            <label>First Name</label>
-                            <input onChange={(event)=> this.props.typing(event, 'first-name')}className="form-control" type="text"></input>
-                        </div>
-                        <div className="form-group">
-                            <label>Last Name</label>
-                            <input onChange={(event)=> this.props.typing(event, 'last-name')} className="form-control" type="text"></input>
-                        </div>
                         <div className="form-group">
                             <label>Address 1</label>
                             <input onChange={(event)=> this.props.typing(event, 'address-1')} className="form-control" type="text"></input>
@@ -88,7 +97,12 @@ class Confirm extends React.Component {
                             <input onChange={(event)=> this.props.typing(event, 'zip')} className="form-control" type="text"></input>
                         </div>
 
-                        <button onClick={()=> this.props.chargeCard(this.getCartTotal() * 100, this.props.token)}>Submit Payment</button>
+                        {this.props.empty_fields ?
+                            <p className="message">Please fill out all the fields</p> :
+                            <p></p>
+                        }
+
+                        <button onClick={()=>this.checkForm()}>Submit Payment</button>
                     </div>
                 </div>
 

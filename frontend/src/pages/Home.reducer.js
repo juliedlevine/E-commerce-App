@@ -16,7 +16,8 @@ const INITIAL_STATE = {
     password: '',
     password_confirm: '',
     passwords_match: true,
-    shopping_cart: []
+    shopping_cart: [],
+    empty_fields: false
 };
 
 function reducer(state = INITIAL_STATE, action) {
@@ -44,7 +45,8 @@ function reducer(state = INITIAL_STATE, action) {
             token: action.payload.token,
             first_name: action.payload.first_name,
             user_id: action.payload.id,
-            showLogin: false
+            showLogin: false,
+            empty_fields: false
         })
     } else if (action.type === 'logout') {
         Cookies.remove('name');
@@ -55,6 +57,10 @@ function reducer(state = INITIAL_STATE, action) {
             email: '',
             password: '',
             shopping_cart: []
+        })
+    } else if (action.type === 'empty_fields') {
+        return Object.assign({}, state, {
+            empty_fields: true
         })
     } else if (action.type === 'first-name') {
         return Object.assign({}, state, {

@@ -1,13 +1,14 @@
 import $ from 'jquery';
 import { hashHistory } from 'react-router'
 const StripeCheckout = window.StripeCheckout;
+const BASEURL = location.hostname === 'localhost' ? 'http://localhost:4000' : '';
 
 // Show products on home page
 export function getProducts() {
     let asyncAction = function(dispatch) {
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:4000/api/products',
+            url: BASEURL + '/api/products',
         })
         .then(data => dispatch({
             type: 'get-products',
@@ -26,7 +27,7 @@ export function getCart(token) {
     let asyncAction = function(dispatch) {
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:4000/api/shopping_cart_items',
+            url: BASEURL + '/api/shopping_cart_items',
             contentType: 'application/json',
             data: JSON.stringify({
                 token: token
@@ -49,7 +50,7 @@ export function getDetails(id) {
     let asyncAction = function(dispatch) {
         $.ajax({
             type: 'GET',
-            url: 'http://localhost:4000/api/product/' + id,
+            url: BASEURL + '/api/product/' + id,
         })
         .then(data => {
             dispatch({
@@ -87,12 +88,19 @@ export function typing(event, field) {
     }
 }
 
+// Check if all fields are filled in a form
+export function emptyFields() {
+    return {
+        type: 'empty_fields'
+    }
+}
+
 // Submit login
 export function submitLogin(email, password) {
     let asyncAction = function(dispatch) {
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:4000/api/user/login',
+            url: BASEURL + '/api/user/login',
             contentType: 'application/json',
             data: JSON.stringify({
                 email: email,
@@ -116,7 +124,7 @@ export function submitSignUp(first, last, address1, address2, city, state, zip, 
     let asyncAction = function(dispatch) {
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:4000/api/user/signup',
+            url: BASEURL + '/api/user/signup',
             contentType: 'application/json',
             data: JSON.stringify({
                 first_name: first,
@@ -150,7 +158,7 @@ export function addToCart(id, token) {
     let asyncAction = function(dispatch) {
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:4000/api/shopping_cart',
+            url: BASEURL + '/api/shopping_cart',
             contentType: 'application/json',
             data: JSON.stringify({
                 product_id: id,
@@ -177,7 +185,7 @@ export function deleteFromCart(item, token) {
     let asyncAction = function(dispatch) {
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:4000/api/delete_shopping_cart',
+            url: BASEURL + '/api/delete_shopping_cart',
             contentType: 'application/json',
             data: JSON.stringify({
                 item: item,
@@ -203,7 +211,7 @@ export function deleteFromCart(item, token) {
 //     let asyncAction = function(dispatch) {
 //         $.ajax({
 //             type: 'POST',
-//             url: 'http://localhost:4000/api/checkout',
+//             url: BASEURL + '/api/checkout',
 //             contentType: 'application/json',
 //             data: JSON.stringify({
 //                 token: token
@@ -223,27 +231,32 @@ export function deleteFromCart(item, token) {
 //     return asyncAction;
 // }
 
-export function chargeCard(amount, cookieToken) {
+// Submit payment button click
+export function chargeCard(amount, cookieToken, email) {
     let asyncAction = function(dispatch) {
         let handler = StripeCheckout.configure({
             key: 'pk_test_mHlocB4xkrc0EgJxchCMRjFs',
-            image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+            image: '/envelope.png',
             locale: 'auto',
             token: function callback(token) {
                 var stripeToken = token.id;
-                console.log(stripeToken);
+                console.log('Public stripe token recieved if payment info verified: ', stripeToken);
+                // If verified, send stripe token to backend
                 $.ajax({
                     type: 'POST',
-                    url: 'http://localhost:4000/api/pay',
+                    url: BASEURL + '/api/pay',
                     contentType: 'application/json',
                     data: JSON.stringify({
-                        stripeToken: stripeToken
+                        stripeToken: stripeToken,
+                        email: email,
+                        amount: amount
                     })
                 })
+                // After payment is processed in the back end send another request to update the database and set state
                 .then(response => {
                     $.ajax({
                         type: 'POST',
-                        url: 'http://localhost:4000/api/checkout',
+                        url: BASEURL + '/api/checkout',
                         contentType: 'application/json',
                         data: JSON.stringify({
                             token: cookieToken

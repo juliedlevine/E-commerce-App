@@ -6,7 +6,7 @@ class SignUp extends React.Component {
 
     checkForm() {
         if (this.props.first_name === '' || this.props.last_name === '' || this.props.address_1 === '' || this.props.city === '' || this.props.state === '' || this.props.email === '' || this.props.password === '') {
-            alert('Please fill out all the fields!');
+            this.props.emptyFields();
         } else {
             this.props.submitSignUp(this.props.first_name, this.props.last_name, this.props.address_1, this.props.address_2, this.props.city, this.props.state, this.props.zip, this.props.email, this.props.password);
         }
@@ -54,9 +54,15 @@ class SignUp extends React.Component {
                 <div className="form-group">
                     <label>Confirm Password</label>
                     <input onChange={(event)=> this.props.typing(event, 'password-confirm')} className="form-control" type="password"></input>
+
                     {this.props.passwords_match ?
-                        <br /> :
-                        <div className="password-message">Passwords don't match</div>}
+                        <p></p> :
+                        <p className="message">Passwords don't match</p>}
+
+                    {this.props.empty_fields ?
+                        <p className="message">Please fill out all the fields</p> :
+                        <p></p>
+                    }
 
                 </div>
                 <button disabled={!this.props.passwords_match} onClick={()=>this.checkForm()}>Submit</button>
