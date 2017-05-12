@@ -10,13 +10,11 @@ const config = require('./config');
 const stripePackage = require('stripe');
 const stripe = stripePackage(config.stripeSecret);
 
-const db = pgp({
-    database: 'e-commerce'
-});
+const db = pgp(config.db);
 
 const app = express();
 app.use(bodyParser.json());
-// serve all the public files
+// serve all the public
 app.use(express.static('public'));
 app.use(cors());
 
