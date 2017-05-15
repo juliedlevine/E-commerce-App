@@ -1,5 +1,3 @@
-// ctrl + shift + m to enter preview mode in atom
-
 # Lucy Mail
 ---
 ## [Live Demo](http://www.lucymail.juliemdyer.com)
@@ -276,7 +274,7 @@ export function typing(event, field) {
     }
 }
 ```
-Over in the reducer I have separate cases for each field. This is where I'm sure there's a better way. But it does work! Now if I go look in my redux tools ill see that the state has been updated for these fields. 
+Over in the reducer I have separate cases for each field. This is where I'm sure there's a better way. But it does work! Now if I go look in my redux tools ill see that the state has been updated for these fields.
 ```Javascript
 } else if (action.type === 'first-name') {
     return Object.assign({}, state, {

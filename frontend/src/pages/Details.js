@@ -17,25 +17,26 @@ class Details extends React.Component {
 
     render() {
         return (
-            <div>
-                <div className="details">
-                    <img className="product-image" alt="envelope" src={this.props.details.image_url}></img>
-                    <div className="product-info">
-                        <h2>{this.props.details.name}</h2>
-                        <div>---</div>
-                        <h2>${this.props.details.price}.00</h2>
-                        <p>{this.props.details.description}</p>
-                        <ul>
-                            <li>envelope dimensions {this.props.details.envelope_dimension}</li>
-                            <li>card dimensions {this.props.details.card_dimension}</li>
-                            <li>made in the U.S.A.</li>
-                        </ul>
+            <div className="details">
+                <div className="product-image">
+                    <img alt="envelope" src={this.props.details.image_url}></img>
+                </div>
 
-                        <button onClick={()=> this.checkUser()}className="add-cart">Add to cart</button>
-                        {this.props.empty_fields?
-                            <p className="message">Please log in or sign up</p> :
-                            <p></p>}
-                    </div>
+                <div className="product-info">
+                    <h2>{this.props.details.name}</h2>
+                    <div>---</div>
+                    <h2>${this.props.details.price}.00</h2>
+                    <p>{this.props.details.description}</p>
+                    <ul>
+                        <li>envelope dimensions {this.props.details.envelope_dimension}</li>
+                        <li>card dimensions {this.props.details.card_dimension}</li>
+                        <li>made in the U.S.A.</li>
+                    </ul>
+
+                    <button onClick={()=> this.checkUser()}className="add-cart">Add to cart</button>
+                    {this.props.empty_fields?
+                        <p className="message">Please log in or sign up</p> :
+                        <p></p>}
                 </div>
             </div>
         );
