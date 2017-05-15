@@ -33,14 +33,18 @@ function reducer(state = INITIAL_STATE, action) {
         return Object.assign({}, state, {
             showLogin: !state.showLogin
         })
-    } else if (action.type === 'read-cookie') {
+    } else if (action.type === 'read-cookie-name') {
         return Object.assign({}, state, {
-            first_name: action.first_name,
+            first_name: action.first_name
+        })
+    } else if (action.type === 'read-cookie-token') {
+        return Object.assign({}, state, {
             token: action.token
         })
     } else if (action.type === 'login-successful') {
         Cookies.set('token', action.payload.token);
         Cookies.set('name', action.payload.first_name);
+
         return Object.assign({}, state, {
             token: action.payload.token,
             first_name: action.payload.first_name,

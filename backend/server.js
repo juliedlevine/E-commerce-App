@@ -48,7 +48,7 @@ app.post('/api/user/signup', (req, resp, next) => {
             let newData = {
                 first_name: loginDetails.first_name,
                 id: loginDetails.id,
-                token: token
+                token: token.token
             }
             resp.json(newData);
         })

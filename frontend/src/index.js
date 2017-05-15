@@ -22,12 +22,19 @@ const store = Redux.createStore(
 );
 
 let name = Cookies.get('name');
+if (name != undefined) {
+    store.dispatch({
+        type: 'read-cookie-name',
+        first_name: name
+    })
+}
 let token = Cookies.get('token');
-store.dispatch({
-    type: 'read-cookie',
-    first_name: name,
-    token: token
-})
+if (token != undefined) {
+    store.dispatch({
+        type: 'read-cookie-token',
+        token: token.token
+    })
+}
 
 ReactDOM.render(
     <ReactRedux.Provider store={store}>
